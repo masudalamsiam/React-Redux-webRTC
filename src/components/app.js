@@ -1,68 +1,47 @@
-import React, { useEffect, useState } from "react";
-import webSocket from './web-socket-client'
+import React from "react";
+import { Provider } from "react-redux";
+import store from "./store";
+import LandingPage from './landing-page/landing-page'
 
 const App = () => {
-    const [socket, setSocket] = useState(null)
-    useEffect(() => {
-        let Socket = webSocket("wss://lmwtkfmvhh.execute-api.us-east-2.amazonaws.com/Prod/")
-        Socket.onConnect((event) => {
-            console.log('onConnect ', event)
-        })
-        Socket.onError((event) => {
-            console.log('onError ', event)
-        })
-        Socket.onClose((event) => {
-            console.log('onClose ', event)
-        })
+    // const [_socket, setSocket] = useState(null)
+    // useEffect(() => {
+    //     let socket = new WebSocket('wss://6d6qoei593.execute-api.us-east-2.amazonaws.com/Prod?name=siam mridha')
+    //     socket.onmessage = (event) => {
+    //         console.log(event)
+    //     }
 
-        Socket.on('user-disconnected', (args) => {
-            console.log('user-disconnected ', args)
-        })
+    //     socket.onopen = (event) => {
+    //         console.log(event)
+    //     }
 
-        Socket.on('user-connected', (args) => {
-            console.log('user-connected ', args)
-        })
+    //     socket.onerror = (event) => {
+    //         console.log(event)
+    //     }
 
-        Socket.on('call', (args) => {
-            console.log('incoming-call ', args)
-        })
+    //     socket.onclose = (event) => {
+    //         console.log(event)
+    //     }
 
-        Socket.on('call-accept', (args) => {
-            console.log('accept ', args)
-        })
+    //     setSocket(socket)
+    // }, [])
 
-        Socket.on('call-decline', (args) => {
-            console.log('decline ', args)
-        })
+    // const call = () => {
+    //     _socket.send(JSON.stringify({ action: 'sendmessage', data: { 'Test': 'test' } }))
+    // }
 
-        setSocket(Socket)
-    }, [])
+    // const acceptCall = () => {
+    //     _socket.send(JSON.stringify({ action: 'call-accept', data: { 'Test': 'test' } }))
+    // }
 
-    const call = () => {
-        socket.sendTo('call', 'IFMdRfIiCYcCFjw=', { 'Test': 'test' }, (args) => {
-            console.log('call ', args)
-        })
-    }
-
-    const acceptCall = () => {
-        socket.sendTo('call-accept', 'test', (args) => {
-            console.log('call-accept ', args)
-        })
-    }
-
-    const declineCall = () => {
-        socket.sendTo('call-decline', 'test', (args) => {
-            console.log('call-decline ', args)
-        })
-    }
+    // const declineCall = () => {
+    //     _socket.send(JSON.stringify({ action: 'call-decline', data: { 'Test': 'test' } }))
+    // }
 
     return (
-        <div>
-            <div>LandingPage</div>
-            <button onClick={call}>Call</button>
-            <button onClick={acceptCall}>Accept Call</button>
-            <button onClick={declineCall}>Decline Call</button>
-        </div>
+        <Provider store={store}>
+            <LandingPage />
+        </Provider>
     );
 }
 
