@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/React-Redux-webRTC/static/css/main.4990e461.chunk.css",
+    "main.js": "/React-Redux-webRTC/static/js/main.f6b6b286.chunk.js",
+    "main.js.map": "/React-Redux-webRTC/static/js/main.f6b6b286.chunk.js.map",
+    "runtime-main.js": "/React-Redux-webRTC/static/js/runtime-main.a6f8af1a.js",
+    "runtime-main.js.map": "/React-Redux-webRTC/static/js/runtime-main.a6f8af1a.js.map",
+    "static/js/2.d67d11ad.chunk.js": "/React-Redux-webRTC/static/js/2.d67d11ad.chunk.js",
+    "static/js/2.d67d11ad.chunk.js.map": "/React-Redux-webRTC/static/js/2.d67d11ad.chunk.js.map",
+    "index.html": "/React-Redux-webRTC/index.html",
+    "precache-manifest.c31795d7158e6c8d639910863cfed625.js": "/React-Redux-webRTC/precache-manifest.c31795d7158e6c8d639910863cfed625.js",
+    "service-worker.js": "/React-Redux-webRTC/service-worker.js",
+    "static/css/main.4990e461.chunk.css.map": "/React-Redux-webRTC/static/css/main.4990e461.chunk.css.map",
+    "static/js/2.d67d11ad.chunk.js.LICENSE": "/React-Redux-webRTC/static/js/2.d67d11ad.chunk.js.LICENSE"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a6f8af1a.js",
+    "static/js/2.d67d11ad.chunk.js",
+    "static/css/main.4990e461.chunk.css",
+    "static/js/main.f6b6b286.chunk.js"
+  ]
+}
