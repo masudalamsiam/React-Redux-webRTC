@@ -1,9 +1,8 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux"
 import webSocket from '../web-socket-client'
-import Connected from '../connected/connected'
 
-const LandingPage = () => {
+const Authentication = (props) => {
     const name = useSelector(state => state.user.name)
     const Socket = useSelector(state => state.socket)
     const dispatch = useDispatch()
@@ -25,9 +24,8 @@ const LandingPage = () => {
     }
     return (
         <React.Fragment>
-            {Socket ?
-                <Connected /> :
-                <div>
+            {Socket ? props.children :
+                < div >
                     <div>Enter Your Name</div>
                     <input onChange={handleChange} value={name} />
                     <button onClick={handelConnect}>Connect</button>
@@ -37,4 +35,4 @@ const LandingPage = () => {
     );
 };
 
-export default React.memo(LandingPage)
+export default React.memo(Authentication)

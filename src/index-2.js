@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'; c
+import React, { useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
@@ -58,7 +58,16 @@ function App() {
         // retrieve and parse the SDP copied from the remote peer
         const desc = JSON.parse(textRef.current.value)
         // set sdp as remote description
-        pc.setRemoteDescription(new RTCSessionDescription(desc))
+        pc.setRemoteDescription(new RTCSessionDescription(desc)).then(() => {
+            pc.createAnswer({ offerToReceiveVideo: 1 })
+                .then(sdp => {
+                    console.log(JSON.stringify(sdp))
+                    // set answer sdp as local description
+                    pc.setLocalDescription(sdp)
+                }).catch((error) => {
+                    console.log('createAnswer', error)
+                })
+        })
             .catch((error) => {
                 console.log('setRemoteDescription', error)
             })

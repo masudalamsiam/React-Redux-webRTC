@@ -1,8 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
+import styles from './connected.module.css'
+import Call from '../call/call'
+import CallRespond from '../call-respond/call-respond'
 
 const Connected = () => {
-    const name = useSelector(state => state.user.name)
+    const video = useRef(null)
+    const { calling_status } = useSelector(state => state.calling)
+    const { incoming_call } = useSelector(state => state.incoming_call)
+    const rtc = useSelector(state => state.RTC)
     const users = useSelector(state => state.users)
     const Socket = useSelector(state => state.socket)
     const dispatch = useDispatch()
@@ -11,7 +17,7 @@ const Connected = () => {
         Socket.onError((event) => {
             console.log('onError ', event)
         })
-        Socket.send('get-users', '', (event) => {
+        Socket.send('get-users', null, (event) => {
             dispatch({ type: "SET-USERS", payload: event.users })
         })
         Socket.on('user-connected', ({ name, from }) => {
@@ -21,45 +27,47 @@ const Connected = () => {
             dispatch({ type: "DELETE-USER", payload: from })
         })
         Socket.on('call', (args) => {
-            alert(`call from: ${args}`)
+            dispatch({ type: "INCOMING-CALL", payload: { incoming_call: true, ...args } })
         })
-        Socket.on('call-accept', (args) => {
-            alert(`call-accept: ${args}`)
+        rtc.addEventListener('track', ({ streams: [stream] }) => {
+            console.log('streams:', stream)
+            video.current.srcObject = stream
+            video.current.muted = false
         })
-        Socket.on('call-decline', (args) => {
-            alert(`call-decline: ${args}`)
+        // rtc.addEventListener('iceconnectionstatechange', (e) => {
+        //     console.log('IC Connection State Change:', e)
+        // })
+        rtc.addEventListener('icecandidateerror', (e) => {
+            console.log('IC Candidate Error:', e)
         })
-    }, [Socket, dispatch])
+
+        navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+            .then((stream) => {
+                video.current.srcObject = stream
+                for (const track of stream.getTracks()) {
+                    rtc.addTrack(track, stream)
+                }
+            }).catch((error) => {
+                alert(`getUserMedia() error: ${error}`)
+            })
+    }, [Socket, dispatch, rtc])
 
     const call = (client) => {
-        console.log(client)
-        Socket.sendTo('call', client, 'test', (args) => {
-            console.log('call ', args)
-        })
-    }
-
-    const acceptCall = (client) => {
-        Socket.sendTo('call-accept', client, 'test', (args) => {
-            console.log('call-accept ', args)
-        })
-    }
-
-    const declineCall = (client) => {
-        Socket.sendTo('call-decline', client, 'test', (args) => {
-            console.log('call-decline ', args)
-        })
+        dispatch({ type: "CALLING", payload: { calling_status: true, calling_profile: client } })
     }
 
     return (
-        <div>
-            <div>Hello {name} you are now connected.</div>
-            <button onClick={acceptCall}>Accept Call</button>
-            <button onClick={declineCall}>Decline Call</button>
-            {users.map((user) =>
-                <button key={user.socket_id} onClick={() => call(user.socket_id)}>
-                    Call {user.name}
-                </button>
-            )}
+        <div className={styles.connected}>
+            <video className={styles.video} ref={video} autoPlay muted />
+            <div className={styles.user_list}>
+                {users.map((user) =>
+                    <button key={user.socket_id} onClick={() => call(user)}>
+                        Call {user.name}
+                    </button>
+                )}
+            </div>
+            {calling_status && <Call />}
+            {incoming_call && <CallRespond />}
         </div>
     );
 };

@@ -29,7 +29,7 @@ export default (url) => {
         }
 
         socket.onmessage = (event) => {
-            console.log(event)
+            // console.log(event)
             try {
                 const data = JSON.parse(event.data)
                 if (call_back && data.action) {
@@ -44,18 +44,17 @@ export default (url) => {
         window.addEventListener(action, listener)
     }
 
-    const send = (action, data, call_back) => {
+    const send = (action, data, callbackFunction) => {
+        const callback = `${data && data.call_back ? data.call_back : `${action}callback`}`
+        data = {
+            ...data,
+            call_back: callback
+        }
         socket.send(JSON.stringify({ action, data }))
-        if (call_back) {
-            on(`${action}call_back`, call_back, true)
+        if (callbackFunction) {
+            on(callback, callbackFunction, true)
         }
     }
 
-    const sendTo = (action, client, data, call_back) => {
-        socket.send(JSON.stringify({ action, client, data }))
-        if (call_back) {
-            on(`${action}call_back`, call_back, true)
-        }
-    }
-    return { on, sendTo, send, onConnect, onClose, onError }
+    return { on, send, onConnect, onClose, onError }
 }

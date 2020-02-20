@@ -10,6 +10,12 @@ export default (state, { type, payload }) => {
       return { ...state, users: [...state.users, payload] };
     case "DELETE-USER":
       return { ...state, users: state.users.filter((user) => user.socket_id === payload) }
+    case "CALLING":
+      return { ...state, calling: { ...state.calling, ...payload } }
+    case "CALL-END":
+      return { ...state, calling: { ...state.calling, ...payload } }
+    case "INCOMING-CALL":
+      return { ...state, incoming_call: { ...state.incoming_call, ...payload } }
     default:
       return state;
   }
