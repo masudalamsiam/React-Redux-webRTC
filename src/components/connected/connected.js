@@ -41,7 +41,7 @@ const Connected = () => {
             console.log('IC Candidate Error:', e)
         })
 
-        navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+        navigator.mediaDevices.getUserMedia({ audio: true, video: { width: 3840, height: 2160 } })
             .then((stream) => {
                 video.current.srcObject = stream
                 for (const track of stream.getTracks()) {
@@ -58,7 +58,7 @@ const Connected = () => {
 
     return (
         <div className={styles.connected}>
-            <video className={styles.video} ref={video} autoPlay muted />
+            <video className={styles.video} ref={video} autoPlay muted playsInline />
             <div className={styles.user_list}>
                 {users.map((user) =>
                     <button key={user.socket_id} onClick={() => call(user)}>

@@ -10,7 +10,7 @@ const Call = () => {
     const Socket = useSelector(state => state.socket)
 
     useEffect(() => {
-        rtc.createOffer({ offerToReceiveVideo: 1 })
+        rtc.createOffer({ offerToReceiveAudio: 1, offerToReceiveVideo: 1 })
             .then((sdp) => {
                 // set answer sdp as local description
                 rtc.setLocalDescription(sdp)

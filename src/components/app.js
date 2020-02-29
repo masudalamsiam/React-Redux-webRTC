@@ -8,11 +8,11 @@ import Connected from './connected/connected'
 const App = () => {
     return (
         <Provider store={store}>
-            <Authentication >
+            {/* <Authentication >
                 <Connected />
-            </Authentication>
+            </Authentication> */}
         </Provider>
-    );
+    )
 }
 
 export default App

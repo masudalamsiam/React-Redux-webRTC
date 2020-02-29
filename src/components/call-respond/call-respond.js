@@ -13,7 +13,7 @@ const CallRespond = (props) => {
         // set sdp as remote description
         rtc.setRemoteDescription(new RTCSessionDescription(RTCSessionDescriptionInit))
             .then(() => {
-                rtc.createAnswer({ offerToReceiveVideo: 1 })
+                rtc.createAnswer({ offerToReceiveAudio: 1, offerToReceiveVideo: 1 })
                     .then((sdp) => {
                         // set answer sdp as local description
                         rtc.setLocalDescription(sdp)
